@@ -7,6 +7,9 @@ The name comes from the Japanese word <strong>Shima (縞)</strong>, meaning "Str
   </p>
 </div>
 
+# Is Shima Right for You?
+it might not be.
+
 # Getting Started
 TODO
 
