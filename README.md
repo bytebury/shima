@@ -27,7 +27,7 @@ use shima::customer::{CheckoutSession, CreateCheckoutSession};
 // Create a customer in Stripe
 async create_customer() -> Result<Customer, shima::Error> {
     // Generate a new shima client, reading from our environment variables
-    let client = ripe::Client::from_env();
+    let client = shima::Client::from_env();
 
     // Create a customer request struct
     let mut customer = CreateCustomer::new("John Doe", "john.doe@example.com");
@@ -48,9 +48,9 @@ todo!();
 use shima::billing::{BillingPortalSession, CreateBillingPortalSession};
 
 // Let customers manage their subscriptions
-async manage_subscriptions() -> Result<BillingPortalSession, ripe::Error> {
+async manage_subscriptions() -> Result<BillingPortalSession, shima::Error> {
     // Generate a new shima client, reading from our environment variables
-    let client = ripe::Client::from_env();
+    let client = shima::Client::from_env();
     let customer: CustomerId = "cus_1234567".try_into()?;
 
     // Create the Billing Portal Session
