@@ -1,0 +1,15 @@
+[package]
+name = "ripe"
+version = "0.1.0"
+edition = "2024"
+authors = ["Bytebury LLC. <bytebury@gmail.com>"]
+description = "A lightweight Stripe library designed for software-as-a-service providers, enabling easy integration with Stripe's API."
+readme = "README.md"
+keywords = ["stripe", "stripe-webhooks", "api"]
+license = "MIT"
+
+[dependencies]
+dotenvy = "0.15.7"
+reqwest = { version = "0.13.1", features = ["json", "form"] }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
