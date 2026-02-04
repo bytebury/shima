@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/bytebury/asset-manager/refs/heads/main/lemon.svg" alt="ripe logo" width="96" />
+  <img src="https://raw.githubusercontent.com/bytebury/asset-manager/refs/heads/main/zebra.svg" alt="ripe logo" width="96" />
   <h1>Shima (縞)</h1>
   <p>
     <strong>Shima</strong> is a lightweight, high-performance Stripe API client library written in Rust.
