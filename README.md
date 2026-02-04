@@ -14,8 +14,8 @@ use ripe::customer::{CheckoutSession, CreateCheckoutSession};
 async create_customer() -> Result<Customer, ripe::Error> {
     let ripe_client = ripe::Client::new_from_env();
 
-    CheckoutSession::create(
-        CreateCheckoutSession {
+    Customer::create(
+        CreateCustomer {
             name: "John Doe",
             email: "john.doe@example.com",
             ..Default::default(),
