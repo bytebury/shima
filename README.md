@@ -7,14 +7,14 @@ The name comes from the Japanese word <strong>Shima (縞)</strong>, meaning "Str
   </p>
 </div>
 
-# Is Shima Right for You?
+## Is Shima Right for You?
 it might not be.
 
-# Getting Started
+## Getting Started
 TODO
 
-# Usage
-## Generating a new shima client
+## Usage
+### Generating a new shima client
 ```rust
 // You can generate directly from your environment variables if you
 // have `STRIPE_SECRET_KEY` set. This is preferred.
@@ -23,7 +23,7 @@ let client = shima::Client::from_env();
 let client = shima::Client::new("sk_test_123456...");
 ```
 
-## Creating a Stripe Customer
+### Creating a Stripe Customer
 ```rust
 use shima::customer::{Customer, CreateCustomer};
 
@@ -41,12 +41,12 @@ async create_customer() -> Result<Customer, shima::Error> {
 }
 ```
 
-## Purchasing Subscriptions / Checkout
+### Purchasing Subscriptions / Checkout
 ```rust
 todo!();
 ```
 
-## Manage Subscriptions / Billing Portal
+### Manage Subscriptions / Billing Portal
 ```rust
 use shima::billing::{BillingPortalSession, CreateBillingPortalSession};
 
@@ -63,7 +63,7 @@ async manage_subscriptions() -> Result<BillingPortalSession, shima::Error> {
 }
 ```
 
-## Webhooks
+### Webhooks
 ```rust
 todo!();
 ```
