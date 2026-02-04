@@ -11,15 +11,16 @@ TODO
 ```rust
 use ripe::customer::{CheckoutSession, CreateCheckoutSession};
 
+// Create a customer in Stripe
 async create_customer() -> Result<Customer, ripe::Error> {
-    let ripe_client = ripe::Client::new_from_env();
+    // Generate a new ripe client, reading from our environment variables
+    let client = ripe::Client::new_from_env();
 
-    Customer::create(
-        CreateCustomer {
-            name: "John Doe",
-            email: "john.doe@example.com",
-            ..Default::default(),
-        }
-    ).await
+    // Create a customer request struct
+    let mut customer = CreateCustomer::new("John Doe", "john.doe@example.com");
+    customer.metadata.insert("user_id", "1");
+
+    // Attempt to create the customer
+    Customer::create(&client, customer).await
 }
 ```
