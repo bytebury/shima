@@ -42,7 +42,18 @@ todo!();
 
 ## Manage Subscriptions / Billing Portal
 ```rust
-todo!();
+use ripe::billing::{BillingPortalSession, CreateBillingPortalSession}
+
+// Let customers manage their subscriptions
+async manage_subscriptions() -> Result<BillingPortalSession, ripe::Error> {
+    // Generate a new ripe client, reading from our environment variables
+    let client = ripe::Client::from_env();
+
+    // Create the Billing Portal Session
+    let session = CreateBillingPortalSession::new("cus_1234567".try_into()?, "");
+
+   BillingPortalSession::create(&client, session).await
+}
 ```
 
 ## Webhooks
