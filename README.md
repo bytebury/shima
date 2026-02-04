@@ -22,7 +22,7 @@ let client = shima::Client::new("sk_test_123456...");
 
 ## Creating a Stripe Customer
 ```rust
-use shima::customer::{CheckoutSession, CreateCheckoutSession};
+use shima::customer::{Customer, CreateCustomer};
 
 // Create a customer in Stripe
 async create_customer() -> Result<Customer, shima::Error> {
