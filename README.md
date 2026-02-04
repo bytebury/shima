@@ -8,6 +8,15 @@
 TODO
 
 # Usage
+## Generating a new ripe client
+```rust
+// You can generate directly from your environment variables if you
+// have `STRIPE_SECRET_KEY` set. This is preferred.
+let client = ripe::Client::from_env();
+// Alternatively, you can load it from a string.
+let client = ripe::Client::new("sk_test_123456...");
+```
+## Creating a Stripe Customer
 ```rust
 use ripe::customer::{CheckoutSession, CreateCheckoutSession};
 
