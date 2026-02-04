@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/bytebury/asset-manager/refs/heads/main/lemon.svg" alt="ripe logo" width="128" />
+  <img src="https://raw.githubusercontent.com/bytebury/asset-manager/refs/heads/main/lemon.svg" alt="ripe logo" width="96" />
   <h1>Ripe</h1>
   <p>A lightweight Stripe library designed for SaaS providers. Enabling easy integration with Stripe's API.</p>
 </div>
