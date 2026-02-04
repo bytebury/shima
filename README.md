@@ -48,9 +48,10 @@ use ripe::billing::{BillingPortalSession, CreateBillingPortalSession};
 async manage_subscriptions() -> Result<BillingPortalSession, ripe::Error> {
     // Generate a new ripe client, reading from our environment variables
     let client = ripe::Client::from_env();
+    let customer: CustomerId = "cus_1234567".try_into()?;
 
     // Create the Billing Portal Session
-    let session = CreateBillingPortalSession::new("cus_1234567".try_into()?, "");
+    let session = CreateBillingPortalSession::new(customer, "https://example.com");
 
     BillingPortalSession::create(&client, session).await
 }
