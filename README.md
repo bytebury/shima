@@ -1,7 +1,10 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/bytebury/asset-manager/refs/heads/main/lemon.svg" alt="ripe logo" width="96" />
-  <h1>Ripe</h1>
-  <p>A lightweight Stripe library designed for SaaS providers. Enabling easy integration with Stripe's API.</p>
+  <h1>Shima (縞)</h1>
+  <p>
+    **Shima** is a lightweight, high-performance Stripe API client library written in Rust.
+The name comes from the Japanese word **Shima (縞)**, meaning "Stripe" or "Pattern." This library is designed for developers who need a fast, type-safe, and minimal-dependency way to integrate Stripe payments into their Rust applications.
+  </p>
 </div>
 
 # Getting Started
