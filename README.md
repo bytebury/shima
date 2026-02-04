@@ -2,8 +2,8 @@
   <img src="https://raw.githubusercontent.com/bytebury/asset-manager/refs/heads/main/lemon.svg" alt="ripe logo" width="96" />
   <h1>Shima (縞)</h1>
   <p>
-    **Shima** is a lightweight, high-performance Stripe API client library written in Rust.
-The name comes from the Japanese word **Shima (縞)**, meaning "Stripe" or "Pattern." This library is designed for developers who need a fast, type-safe, and minimal-dependency way to integrate Stripe payments into their Rust applications.
+    <strong>Shima</strong> is a lightweight, high-performance Stripe API client library written in Rust.
+The name comes from the Japanese word <strong>Shima (縞)</strong>, meaning "Stripe" or "Pattern." This library is designed for developers who need a fast, type-safe, and minimal-dependency way to integrate Stripe payments into their Rust applications.
   </p>
 </div>
 
@@ -11,22 +11,22 @@ The name comes from the Japanese word **Shima (縞)**, meaning "Stripe" or "Patt
 TODO
 
 # Usage
-## Generating a new ripe client
+## Generating a new shima client
 ```rust
 // You can generate directly from your environment variables if you
 // have `STRIPE_SECRET_KEY` set. This is preferred.
-let client = ripe::Client::from_env();
+let client = shima::Client::from_env();
 // Alternatively, you can load it from a string.
-let client = ripe::Client::new("sk_test_123456...");
+let client = shima::Client::new("sk_test_123456...");
 ```
 
 ## Creating a Stripe Customer
 ```rust
-use ripe::customer::{CheckoutSession, CreateCheckoutSession};
+use shima::customer::{CheckoutSession, CreateCheckoutSession};
 
 // Create a customer in Stripe
-async create_customer() -> Result<Customer, ripe::Error> {
-    // Generate a new ripe client, reading from our environment variables
+async create_customer() -> Result<Customer, shima::Error> {
+    // Generate a new shima client, reading from our environment variables
     let client = ripe::Client::from_env();
 
     // Create a customer request struct
@@ -45,11 +45,11 @@ todo!();
 
 ## Manage Subscriptions / Billing Portal
 ```rust
-use ripe::billing::{BillingPortalSession, CreateBillingPortalSession};
+use shima::billing::{BillingPortalSession, CreateBillingPortalSession};
 
 // Let customers manage their subscriptions
 async manage_subscriptions() -> Result<BillingPortalSession, ripe::Error> {
-    // Generate a new ripe client, reading from our environment variables
+    // Generate a new shima client, reading from our environment variables
     let client = ripe::Client::from_env();
     let customer: CustomerId = "cus_1234567".try_into()?;
 
