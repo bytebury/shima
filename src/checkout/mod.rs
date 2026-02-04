@@ -31,8 +31,14 @@ pub enum Mode {
 
 #[derive(Debug, Deserialize)]
 pub struct LineItem {
-    price: u32,
-    quantity: PriceId,
+    price: PriceId,
+    quantity: u32,
+}
+
+impl LineItem {
+    pub fn new(price: PriceId, quantity: u32) -> Self {
+        Self { price, quantity }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -81,10 +87,29 @@ pub struct CreateCheckoutSession<'a> {
     pub automatic_tax: AutomaticTax,
     pub billing_address_collection: BillingAddressCollection,
     pub customer_update: Option<CustomerUpdate>,
-    pub metadata: Option<HashMap<String, String>>,
+    pub metadata: HashMap<String, String>,
 }
 
 impl<'a> CreateCheckoutSession<'a> {
+    pub fn new_subscription(
+        success_url: &'a str,
+        cancel_url: &'a str,
+        customer: CustomerId,
+        price: PriceId,
+    ) -> Self {
+        Self {
+            line_items: vec![LineItem::new(price, 1)],
+            client_reference_id: None,
+            cancel_url,
+            success_url,
+            customer: Some(customer),
+            mode: Mode::Subscription,
+            automatic_tax: AutomaticTax::collect(),
+            billing_address_collection: BillingAddressCollection::Required,
+            ..Default::default()
+        }
+    }
+
     pub fn to_form_params(&self) -> Vec<(Cow<'_, str>, &str)> {
         vec![
             (Cow::Borrowed("success_url"), self.success_url),

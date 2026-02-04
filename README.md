@@ -43,7 +43,28 @@ async create_customer() -> Result<Customer, shima::Error> {
 
 ### Purchasing Subscriptions / Checkout
 ```rust
-todo!();
+use shima::checkout::{CheckoutSession, CreateCheckoutSession};
+
+// Create a checkout session for a customer
+async create_checkout_session() -> Result<CheckoutSession, shima::Error> {
+    // Generate a new shima client, reading from our environment variables
+    let client = shima::Client::from_env();
+    
+    let success_url = "https://example.com/success";
+    let cancel_url = "https://example.com/cancel";
+    let customer = CustomerId::try_from("cus_1234567")?;
+    let pro_subscription = PriceId::try_from("price_1234567")?;
+
+    let mut session = CreateCheckoutSession::new_subscription(
+        success_url,
+        cancel_url,
+        customer,
+        pro_subscription
+    );
+    session.metadata.insert("user_id", "1");
+
+    CheckoutSession::create(&client, session).await
+}
 ```
 
 ### Manage Subscriptions / Billing Portal
@@ -54,7 +75,7 @@ use shima::billing::{BillingPortalSession, CreateBillingPortalSession};
 async manage_subscriptions() -> Result<BillingPortalSession, shima::Error> {
     // Generate a new shima client, reading from our environment variables
     let client = shima::Client::from_env();
-    let customer: CustomerId = "cus_1234567".try_into()?;
+    let custome = CustomerId::try_from("cus_1234567")?;
 
     // Create the Billing Portal Session
     let session = CreateBillingPortalSession::new(customer, "https://example.com");
