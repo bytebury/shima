@@ -16,6 +16,7 @@ let client = ripe::Client::from_env();
 // Alternatively, you can load it from a string.
 let client = ripe::Client::new("sk_test_123456...");
 ```
+
 ## Creating a Stripe Customer
 ```rust
 use ripe::customer::{CheckoutSession, CreateCheckoutSession};
@@ -32,4 +33,19 @@ async create_customer() -> Result<Customer, ripe::Error> {
     // Attempt to create the customer
     Customer::create(&client, customer).await
 }
+```
+
+## Purchasing Subscriptions / Checkout
+```rust
+todo!();
+```
+
+## Manage Subscriptions / Billing Portal
+```rust
+todo!();
+```
+
+## Webhooks
+```rust
+todo!();
 ```
