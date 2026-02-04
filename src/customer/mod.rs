@@ -52,7 +52,7 @@ impl Display for CustomerId {
 
 #[derive(Debug, Default)]
 pub struct CreateCustomer<'a> {
-    pub name: Option<&'a str>,
+    pub name: &'a str,
     pub email: Option<&'a str>,
     pub phone: Option<&'a str>,
     pub metadata: Option<HashMap<&'a str, &'a str>>,
@@ -62,9 +62,8 @@ impl<'a> CreateCustomer<'a> {
     pub fn to_form_params(&self) -> Vec<(Cow<'a, str>, &str)> {
         let mut params = Vec::new();
 
-        if let Some(name) = self.name {
-            params.push((Cow::Borrowed("name"), name));
-        }
+        params.push((Cow::Borrowed("name"), self.name));
+
         if let Some(phone) = self.phone {
             params.push((Cow::Borrowed("phone"), phone));
         }

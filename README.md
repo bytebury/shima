@@ -17,7 +17,7 @@ async create_customer() -> Result<Customer, ripe::Error> {
     Customer::create(
         CreateCustomer {
             name: "John Doe",
-            email: "john.doe@example.com",
+            email: Some("john.doe@example.com"),
             ..Default::default(),
         }
     ).await
