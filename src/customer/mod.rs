@@ -53,7 +53,7 @@ impl Display for CustomerId {
 #[derive(Debug, Default)]
 pub struct CreateCustomer<'a> {
     pub name: &'a str,
-    pub email: Option<&'a str>,
+    pub email: &'a str,
     pub phone: Option<&'a str>,
     pub metadata: Option<HashMap<&'a str, &'a str>>,
 }
@@ -63,12 +63,10 @@ impl<'a> CreateCustomer<'a> {
         let mut params = Vec::new();
 
         params.push((Cow::Borrowed("name"), self.name));
+        params.push((Cow::Borrowed("email"), self.email));
 
         if let Some(phone) = self.phone {
             params.push((Cow::Borrowed("phone"), phone));
-        }
-        if let Some(email) = self.email {
-            params.push((Cow::Borrowed("email"), email));
         }
         if let Some(meta) = &self.metadata {
             for (k, v) in meta {
