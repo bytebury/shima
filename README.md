@@ -42,7 +42,7 @@ todo!();
 
 ## Manage Subscriptions / Billing Portal
 ```rust
-use ripe::billing::{BillingPortalSession, CreateBillingPortalSession}
+use ripe::billing::{BillingPortalSession, CreateBillingPortalSession};
 
 // Let customers manage their subscriptions
 async manage_subscriptions() -> Result<BillingPortalSession, ripe::Error> {
@@ -52,7 +52,7 @@ async manage_subscriptions() -> Result<BillingPortalSession, ripe::Error> {
     // Create the Billing Portal Session
     let session = CreateBillingPortalSession::new("cus_1234567".try_into()?, "");
 
-   BillingPortalSession::create(&client, session).await
+    BillingPortalSession::create(&client, session).await
 }
 ```
 
