@@ -14,7 +14,7 @@ use ripe::customer::{CheckoutSession, CreateCheckoutSession};
 // Create a customer in Stripe
 async create_customer() -> Result<Customer, ripe::Error> {
     // Generate a new ripe client, reading from our environment variables
-    let client = ripe::Client::new_from_env();
+    let client = ripe::Client::from_env();
 
     // Create a customer request struct
     let mut customer = CreateCustomer::new("John Doe", "john.doe@example.com");

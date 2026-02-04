@@ -21,7 +21,7 @@ impl Client {
         }
     }
 
-    pub fn new_from_env() -> Self {
+    pub fn from_env() -> Self {
         Client {
             stripe_secret_key: std::env::var("STRIPE_SECRET_KEY")
                 .expect("STRIPE_SECRET_KEY environment variable is not set"),

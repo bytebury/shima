@@ -8,7 +8,7 @@ use std::collections::HashMap;
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
-    let client = ripe::Client::new_from_env();
+    let client = ripe::Client::from_env();
     let mut metadata = HashMap::new();
     metadata.insert("user_id", "1");
 
@@ -23,7 +23,7 @@ async fn main() {
 
     dbg!(&checkout_session);
 
-    let ripe_client = ripe::Client::new_from_env();
+    let ripe_client = ripe::Client::from_env();
 
     // Create a customer request struct
     let mut customer = CreateCustomer::new("John Doe", "john.doe@example.com");
