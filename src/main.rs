@@ -1,4 +1,8 @@
-use ripe::{billing::CreateBillingPortalSession, checkout::CreateCheckoutSession};
+use ripe::{
+    billing::CreateBillingPortalSession,
+    checkout::CreateCheckoutSession,
+    customer::{CreateCustomer, Customer},
+};
 use std::collections::HashMap;
 
 #[tokio::main]
@@ -18,4 +22,13 @@ async fn main() {
     .await;
 
     dbg!(&checkout_session);
+
+    let ripe_client = ripe::Client::new_from_env();
+
+    // Create a customer request struct
+    let mut customer = CreateCustomer::new("John Doe", "john.doe@example.com");
+    customer.metadata.insert("user_id", "1");
+
+    // Attempt to create the customer
+    Customer::create(&client, customer).await;
 }

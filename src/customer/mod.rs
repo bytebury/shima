@@ -55,10 +55,19 @@ pub struct CreateCustomer<'a> {
     pub name: &'a str,
     pub email: &'a str,
     pub phone: Option<&'a str>,
-    pub metadata: Option<HashMap<&'a str, &'a str>>,
+    pub metadata: HashMap<&'a str, &'a str>,
 }
 
 impl<'a> CreateCustomer<'a> {
+    pub fn new(name: &'a str, email: &'a str) -> Self {
+        Self {
+            name,
+            email,
+            phone: None,
+            metadata: HashMap::new(),
+        }
+    }
+
     pub fn to_form_params(&self) -> Vec<(Cow<'a, str>, &str)> {
         let mut params = Vec::new();
 
@@ -68,10 +77,9 @@ impl<'a> CreateCustomer<'a> {
         if let Some(phone) = self.phone {
             params.push((Cow::Borrowed("phone"), phone));
         }
-        if let Some(meta) = &self.metadata {
-            for (k, v) in meta {
-                params.push((Cow::Owned(format!("metadata[{}]", k)), v));
-            }
+
+        for (k, v) in self.metadata.clone() {
+            params.push((Cow::Owned(format!("metadata[{}]", k)), v));
         }
 
         params
