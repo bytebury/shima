@@ -8,7 +8,18 @@ The name comes from the Japanese word <strong>Shima (縞)</strong>, meaning "Str
 </div>
 
 ## Is Shima Right for You?
-it might not be.
+Shima is a lightweight, high-performance Stripe API client library written in Rust. It is designed for developers who need a fast, type-safe, and minimal-dependency way to integrate Stripe payments into their Rust applications. With that being said, Shima is not suitable for all use cases. Here are some scenarios where Shima might be a good fit:
+
+1. You use Stripe for checkouts and customer management.
+2. You use Stripe for Subscriptions.
+3. You use Stripe for Webhooks regarding Subscriptions.
+
+## Benefits
+* Shima compiles up to 10x faster than `async-stripe`.
+* Fast
+* Type-safe
+* Minimal dependencies
+* Easy to use
 
 ## Getting Started
 TODO
