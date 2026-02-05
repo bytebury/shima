@@ -95,7 +95,7 @@ async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {
     let client = shima::Client::from_env();
 
     // Get the customer you want to manage.
-    let customer = CustomerId::try_from("cus_123456").unwrap();
+    let customer = CustomerId::try_from("cus_123456")?;
 
     // Create the Customer Portal Session.
     let session = CreateCustomerPortalSession::new(customer, "https://example.com");
