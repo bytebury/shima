@@ -32,8 +32,8 @@ shima = "0.1.0"
 ## Usage
 ### Generating a new shima client
 ```rust
-// You can generate directly from your environment variables.
-// If you have `STRIPE_SECRET_KEY` set. This is preferred.
+// You can generate a client directly from your environment variables
+// if you have `STRIPE_SECRET_KEY` set. This is preferred.
 let client = shima::Client::from_env();
 // Alternatively, you can load it from a string.
 let client = shima::Client::new("sk_test_123456...");
