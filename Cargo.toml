@@ -1,7 +1,9 @@
 [package]
 name = "shima"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
+repository = "https://github.com/bytebury/shima"
+homepage = "https://github.com/bytebury/shima"
 authors = ["Bytebury LLC. <bytebury@gmail.com>"]
 description = "A lightweight Stripe library designed for software-as-a-service providers, enabling easy integration with Stripe's API."
 readme = "README.md"
