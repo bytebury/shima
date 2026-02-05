@@ -1,9 +1,30 @@
-use crate::value_objects::customer::CustomerId;
+use crate::{StripeErrorResponse, value_objects::customer::CustomerId};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CustomerPortalSession {
     url: String,
+}
+
+impl CustomerPortalSession {
+    pub async fn create(
+        client: &crate::Client,
+        session: CreateCustomerPortalSession<'_>,
+    ) -> Result<Self, crate::Error> {
+        let res = client.post("/billing_portal/sessions", &session).await?;
+        let status = res.status();
+
+        if status.is_success() {
+            return Ok(res.json::<Self>().await?);
+        }
+
+        match res.json::<StripeErrorResponse>().await {
+            Ok(e) => Err(crate::Error::Stripe(e.error)),
+            Err(e) => Err(crate::Error::Internal(format!(
+                "Failed to parse Stripe error response: {e}"
+            ))),
+        }
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -18,16 +39,5 @@ impl<'a> CreateCustomerPortalSession<'a> {
             customer,
             return_url,
         }
-    }
-
-    pub async fn create(
-        &self,
-        client: &crate::Client,
-    ) -> Result<CustomerPortalSession, reqwest::Error> {
-        client
-            .post("/billing_portal/sessions", self)
-            .await?
-            .json::<CustomerPortalSession>()
-            .await
     }
 }

@@ -4,11 +4,12 @@ use serde::Serialize;
 pub mod billing;
 pub mod checkout;
 pub mod customer;
+pub mod error;
 pub mod value_objects;
 
-pub use billing::*;
 pub use checkout::*;
 pub use customer::*;
+pub use error::*;
 pub use value_objects::customer::CustomerId;
 pub use value_objects::price::PriceId;
 

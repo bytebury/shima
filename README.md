@@ -43,61 +43,64 @@ let client = shima::Client::new("sk_test_123456...");
 ```rust
 use shima::{Customer, CreateCustomer};
 
-// Create a customer in Stripe
-async create_customer() -> Result<Customer, shima::Error> {
+// Create a Customer in Stripe.
+async fn create_customer() -> Result<Customer, shima::Error> {
     // Generate a new shima client, reading from our environment variables
     let client = shima::Client::from_env();
 
-    // Create a customer request struct
-    let mut customer = CreateCustomer::new("John Doe", "john.doe@example.com");
-    customer.metadata.insert("user_id", "1");
+    // Create a new customer.
+    let mut customer = CreateCustomer::new("John Doe", "john@example.com");
+    customer.metadata.insert("user_id", "123456");
 
-    // Attempt to create the customer
+    // Create the customer.
     Customer::create(&client, customer).await
 }
 ```
 
 ### Purchasing Subscriptions / Checkout
 ```rust
-use shima::{CheckoutSession, CreateCheckoutSession};
+use shima::{CheckoutSession, CreateCheckoutSession, CustomerId, PriceId};
 
-// Create a checkout session for a customer
-async create_checkout_session() -> Result<CheckoutSession, shima::Error> {
+// Create a Checkout Session for a Customer.
+async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
     // Generate a new shima client, reading from our environment variables
     let client = shima::Client::from_env();
-    
+
+    // Set your success and cancellation URLS.
     let success_url = "https://example.com/success";
     let cancel_url = "https://example.com/cancel";
-    let customer = CustomerId::try_from("cus_1234567")?;
-    let pro_subscription = PriceId::try_from("price_1234567")?;
 
+    // Setup the Checkout Session.
     let mut session = CreateCheckoutSession::new_subscription(
+        CustomerId::try_from("cus_1234567")?,
+        PriceId::try_from("price_1234567")?,
         success_url,
         cancel_url,
-        customer,
-        pro_subscription
     );
-    session.metadata.insert("user_id", "1");
+    session.metadata.insert("user_id", "1"); // Optional metadata
 
+    // Create the Checkout Session.
     CheckoutSession::create(&client, session).await
 }
+
 ```
 
 ### Manage Subscriptions / Customer Portal
 ```rust
-use shima::{CustomerId, CustomerPortalSession, CreateCustomerPortalSession};
+use shima::{CustomerPortalSession, CreateCustomerPortalSession, CustomerId};
 
 // Let customers manage their subscriptions
-async manage_subscriptions() -> Result<CustomerPortalSession, shima::Error> {
-    // Generate a new shima client, reading from our environment variables
+async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {
+    // Generate a new shima client, reading from our environment variables.
     let client = shima::Client::from_env();
-    let customer = CustomerId::try_from("cus_1234567")?;
 
-    // Create the Customer Portal Session
-    let session = CustomerPortalSession::create(customer, "https://example.com");
+    // Get the customer you want to manage.
+    let customer = CustomerId::try_from("cus_123456").unwrap();
 
-    // Generate the session URL
-    let session = session.generate(&client).await?.url;
+    // Create the Customer Portal Session.
+    let session = CreateCustomerPortalSession::new(customer, "https://example.com");
+
+    CustomerPortalSession::create(&client, session).await
 }
 ```
 

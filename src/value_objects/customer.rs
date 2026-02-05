@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 pub struct CustomerId(String);
 
 impl TryFrom<&str> for CustomerId {
-    type Error = String;
+    type Error = crate::Error;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         if value.trim().is_empty() {

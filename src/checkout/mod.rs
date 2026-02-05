@@ -1,4 +1,7 @@
-use crate::value_objects::{customer::CustomerId, metadata::Metadata, price::PriceId};
+use crate::{
+    StripeErrorResponse,
+    value_objects::{customer::CustomerId, metadata::Metadata, price::PriceId},
+};
 use serde::{Deserialize, Serialize};
 
 mod value_objects;
@@ -50,18 +53,19 @@ impl CheckoutSession {
     pub async fn create(
         client: &crate::Client,
         session: CreateCheckoutSession<'_>,
-    ) -> Result<Self, reqwest::Error> {
+    ) -> Result<Self, crate::Error> {
         let res = client.post("/checkout/sessions", &session).await?;
+        let status = res.status();
 
-        if !res.status().is_success() {
-            let body = res.text().await?;
-            println!("STRIPE ERROR: {}", body); // This will tell you exactly what's wrong
+        if status.is_success() {
+            return Ok(res.json::<Self>().await?);
         }
-        client
-            .post("/checkout/sessions", &session)
-            .await?
-            .error_for_status()?
-            .json::<Self>()
-            .await
+
+        match res.json::<StripeErrorResponse>().await {
+            Ok(e) => Err(crate::Error::Stripe(e.error)),
+            Err(e) => Err(crate::Error::Internal(format!(
+                "Failed to parse Stripe error response: {e}"
+            ))),
+        }
     }
 }

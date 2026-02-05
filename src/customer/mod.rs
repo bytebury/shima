@@ -1,4 +1,7 @@
-use crate::value_objects::{customer::CustomerId, metadata::Metadata};
+use crate::{
+    StripeErrorResponse,
+    value_objects::{customer::CustomerId, metadata::Metadata},
+};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -37,11 +40,18 @@ impl Customer {
     pub async fn create(
         client: &crate::Client,
         customer: CreateCustomer<'_>,
-    ) -> Result<Customer, reqwest::Error> {
-        client
-            .post("/customers", &customer)
-            .await?
-            .json::<Self>()
-            .await
+    ) -> Result<Customer, crate::Error> {
+        let res = client.post("/customers", &customer).await?;
+
+        if res.status().is_success() {
+            return Ok(res.json::<Self>().await?);
+        }
+
+        match res.json::<StripeErrorResponse>().await {
+            Ok(e) => Err(crate::Error::Stripe(e.error)),
+            Err(e) => Err(crate::Error::Internal(format!(
+                "Failed to parse Stripe error response: {e}"
+            ))),
+        }
     }
 }
