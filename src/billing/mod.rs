@@ -1,4 +1,7 @@
-use crate::{StripeErrorResponse, value_objects::customer::CustomerId};
+use crate::{
+    StripeErrorResponse,
+    value_objects::{customer::CustomerId, urls::ReturnUrl},
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -27,14 +30,14 @@ impl CustomerPortalSession {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct CreateCustomerPortalSession<'a> {
     pub customer: CustomerId,
-    pub return_url: &'a str,
+    pub return_url: ReturnUrl<'a>,
 }
 
 impl<'a> CreateCustomerPortalSession<'a> {
-    pub fn new(customer: CustomerId, return_url: &'a str) -> Self {
+    pub fn new(customer: CustomerId, return_url: ReturnUrl<'a>) -> Self {
         Self {
             customer,
             return_url,

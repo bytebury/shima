@@ -1,5 +1,5 @@
 use crate::{
-    StripeErrorResponse,
+    CancelUrl, StripeErrorResponse, SuccessUrl,
     value_objects::{customer::CustomerId, metadata::Metadata, price::PriceId},
 };
 use serde::{Deserialize, Serialize};
@@ -14,8 +14,8 @@ pub struct CreateCheckoutSession<'a> {
     pub client_reference_id: Option<String>,
     #[serde(flatten)]
     pub customer_update: CustomerUpdate<'a>,
-    pub cancel_url: &'a str,
-    pub success_url: &'a str,
+    pub cancel_url: CancelUrl<'a>,
+    pub success_url: SuccessUrl<'a>,
     pub mode: Mode,
     #[serde(flatten)]
     pub automatic_tax: AutomaticTax,
@@ -30,8 +30,8 @@ impl<'a> CreateCheckoutSession<'a> {
     pub fn new_subscription(
         customer: CustomerId,
         price: PriceId,
-        success_url: &'a str,
-        cancel_url: &'a str,
+        success_url: SuccessUrl<'a>,
+        cancel_url: CancelUrl<'a>,
     ) -> Self {
         Self {
             customer: Some(customer),

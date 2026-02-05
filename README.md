@@ -60,22 +60,19 @@ async fn create_customer() -> Result<Customer, shima::Error> {
 ### Purchasing Subscriptions / Checkout
 ```rust
 use shima::{CheckoutSession, CreateCheckoutSession, CustomerId, PriceId};
+use shima::{CancelUrl, SuccessUrl};
 
 // Create a Checkout Session for a Customer.
 async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
     // Generate a new shima client, reading from our environment variables
     let client = shima::Client::from_env();
 
-    // Set your success and cancellation URLS.
-    let success_url = "https://example.com/success";
-    let cancel_url = "https://example.com/cancel";
-
     // Setup the Checkout Session.
     let mut session = CreateCheckoutSession::new_subscription(
         CustomerId::try_from("cus_1234567")?,
         PriceId::try_from("price_1234567")?,
-        success_url,
-        cancel_url,
+        SuccessUrl::from("https://example.com/success"),
+        CancelUrl::from("https://example.com/cancel"),
     );
     session.metadata.insert("user_id", "1"); // Optional metadata
 
@@ -87,7 +84,7 @@ async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
 
 ### Manage Subscriptions / Customer Portal
 ```rust
-use shima::{CustomerPortalSession, CreateCustomerPortalSession, CustomerId};
+use shima::{CustomerPortalSession, CreateCustomerPortalSession, CustomerId, ReturnUrl};
 
 // Let customers manage their subscriptions
 async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {
@@ -96,9 +93,11 @@ async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {
 
     // Get the customer you want to manage.
     let customer = CustomerId::try_from("cus_123456")?;
+    // When the customer is done with their session, they'll be redirected to this URL.
+    let return_url = ReturnUrl::from("https://example.com");
 
     // Create the Customer Portal Session.
-    let session = CreateCustomerPortalSession::new(customer, "https://example.com");
+    let session = CreateCustomerPortalSession::new(customer, return_url);
 
     CustomerPortalSession::create(&client, session).await
 }

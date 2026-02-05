@@ -12,6 +12,7 @@ pub use customer::*;
 pub use error::*;
 pub use value_objects::customer::CustomerId;
 pub use value_objects::price::PriceId;
+pub use value_objects::urls::{CancelUrl, SuccessUrl};
 
 const STRIPE_API_BASE_URL: &str = "https://api.stripe.com/v1";
 
