@@ -41,7 +41,7 @@ let client = shima::Client::new("sk_test_123456...");
 
 ### Creating a Stripe Customer
 ```rust
-use shima::{Customer, CreateCustomer};
+use shima::customer::{Customer, CreateCustomer};
 
 // Create a Customer in Stripe.
 async fn create_customer() -> Result<Customer, shima::Error> {
@@ -59,8 +59,8 @@ async fn create_customer() -> Result<Customer, shima::Error> {
 
 ### Purchasing Subscriptions / Checkout
 ```rust
-use shima::{CheckoutSession, CreateCheckoutSession, CustomerId, PriceId};
-use shima::{CancelUrl, SuccessUrl};
+use shima::checkout::{CheckoutSession, CreateCheckoutSession};
+use shima::{CustomerId, PriceId, CancelUrl, SuccessUrl};
 
 // Create a Checkout Session for a Customer.
 async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
@@ -84,7 +84,8 @@ async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
 
 ### Manage Subscriptions / Customer Portal
 ```rust
-use shima::{CustomerPortalSession, CreateCustomerPortalSession, CustomerId, ReturnUrl};
+use shima::billing::{CustomerPortalSession, CreateCustomerPortalSession};
+use shima::{CustomerId, ReturnUrl};
 
 // Let customers manage their subscriptions
 async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {

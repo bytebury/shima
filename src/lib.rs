@@ -7,13 +7,8 @@ pub mod customer;
 pub mod error;
 pub mod value_objects;
 
-pub use billing::{CreateCustomerPortalSession, CustomerPortalSession};
-pub use checkout::{CheckoutSession, CreateCheckoutSession};
-pub use customer::{CreateCustomer, Customer};
 pub use error::*;
-pub use value_objects::customer::*;
-pub use value_objects::price::*;
-pub use value_objects::urls::*;
+pub use value_objects::*;
 
 const STRIPE_API_BASE_URL: &str = "https://api.stripe.com/v1";
 
