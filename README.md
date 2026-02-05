@@ -48,7 +48,7 @@ async fn create_customer() -> Result<Customer, shima::Error> {
     // Generate a new shima client, reading from our environment variables
     let client = shima::Client::from_env();
 
-    // Create a new customer.
+    // Setup the new Customer.
     let mut customer = CreateCustomer::new("John Doe", "john@example.com");
     customer.metadata.insert("user_id", "123456");
 
