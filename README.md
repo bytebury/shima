@@ -22,7 +22,12 @@ Shima is a lightweight, high-performance Stripe API client library written in Ru
 * Easy to use
 
 ## Getting Started
-TODO
+Add `shima` to your `Cargo.toml` file:
+
+```toml
+[dependencies]
+shima = "0.1.0"
+```
 
 ## Usage
 ### Generating a new shima client
