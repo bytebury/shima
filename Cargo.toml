@@ -7,7 +7,7 @@ homepage = "https://github.com/bytebury/shima"
 authors = ["Bytebury LLC. <bytebury@gmail.com>"]
 description = "A lightweight Stripe library designed for software-as-a-service providers, enabling easy integration with Stripe's API."
 readme = "README.md"
-keywords = ["shima", "stripe", "stripe-webhooks", "api", "simple-stripe", "stripe-api"]
+keywords = ["shima", "stripe", "stripe-webhooks", "simple-stripe", "stripe-api"]
 license = "MIT"
 
 [dependencies]
