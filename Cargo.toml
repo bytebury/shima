@@ -1,11 +1,11 @@
 [package]
-name = "ripe"
+name = "shima"
 version = "0.1.0"
 edition = "2024"
 authors = ["Bytebury LLC. <bytebury@gmail.com>"]
 description = "A lightweight Stripe library designed for software-as-a-service providers, enabling easy integration with Stripe's API."
 readme = "README.md"
-keywords = ["stripe", "stripe-webhooks", "api"]
+keywords = ["shima", "stripe", "stripe-webhooks", "api"]
 license = "MIT"
 
 [dependencies]

@@ -41,7 +41,7 @@ let client = shima::Client::new("sk_test_123456...");
 
 ### Creating a Stripe Customer
 ```rust
-use shima::customer::{Customer, CreateCustomer};
+use shima::{Customer, CreateCustomer};
 
 // Create a customer in Stripe
 async create_customer() -> Result<Customer, shima::Error> {
@@ -59,7 +59,7 @@ async create_customer() -> Result<Customer, shima::Error> {
 
 ### Purchasing Subscriptions / Checkout
 ```rust
-use shima::checkout::{CheckoutSession, CreateCheckoutSession};
+use shima::{CheckoutSession, CreateCheckoutSession};
 
 // Create a checkout session for a customer
 async create_checkout_session() -> Result<CheckoutSession, shima::Error> {
@@ -83,20 +83,21 @@ async create_checkout_session() -> Result<CheckoutSession, shima::Error> {
 }
 ```
 
-### Manage Subscriptions / Billing Portal
+### Manage Subscriptions / Customer Portal
 ```rust
-use shima::billing::{BillingPortalSession, CreateBillingPortalSession};
+use shima::{CustomerId, CustomerPortalSession, CreateCustomerPortalSession};
 
 // Let customers manage their subscriptions
-async manage_subscriptions() -> Result<BillingPortalSession, shima::Error> {
+async manage_subscriptions() -> Result<CustomerPortalSession, shima::Error> {
     // Generate a new shima client, reading from our environment variables
     let client = shima::Client::from_env();
-    let custome = CustomerId::try_from("cus_1234567")?;
+    let customer = CustomerId::try_from("cus_1234567")?;
 
-    // Create the Billing Portal Session
-    let session = CreateBillingPortalSession::new(customer, "https://example.com");
+    // Create the Customer Portal Session
+    let session = CustomerPortalSession::create(customer, "https://example.com");
 
-    BillingPortalSession::create(&client, session).await
+    // Generate the session URL
+    let session = session.generate(&client).await?.url;
 }
 ```
 

@@ -1,61 +1,14 @@
-use serde::Deserialize;
-use std::borrow::Cow;
+use crate::value_objects::{customer::CustomerId, metadata::Metadata};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::fmt::Display;
 
-#[derive(Debug, Deserialize)]
-pub struct CustomerId(String);
-
-impl TryFrom<String> for CustomerId {
-    type Error = String;
-
-    fn try_from(value: String) -> Result<Self, Self::Error> {
-        if value.trim().is_empty() {
-            return Err("ID cannot be empty".into());
-        }
-
-        if !value.starts_with("cus_") {
-            return Err("Invalid ID format. Customer ID must start with 'cus_'".into());
-        }
-
-        Ok(Self(value))
-    }
-}
-
-impl TryFrom<&str> for CustomerId {
-    type Error = String;
-
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        if value.trim().is_empty() {
-            return Err("ID cannot be empty".into());
-        }
-
-        if !value.starts_with("cus_") {
-            return Err("Invalid ID format. Customer ID must start with 'cus_'".into());
-        }
-
-        Ok(Self(value.into()))
-    }
-}
-
-impl AsRef<str> for CustomerId {
-    fn as_ref(&self) -> &str {
-        &self.0
-    }
-}
-
-impl Display for CustomerId {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.0)
-    }
-}
-
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize)]
 pub struct CreateCustomer<'a> {
     pub name: &'a str,
     pub email: &'a str,
     pub phone: Option<&'a str>,
-    pub metadata: HashMap<&'a str, &'a str>,
+    #[serde(flatten)]
+    pub metadata: Metadata<'a>,
 }
 
 impl<'a> CreateCustomer<'a> {
@@ -63,30 +16,12 @@ impl<'a> CreateCustomer<'a> {
         Self {
             name,
             email,
-            phone: None,
-            metadata: HashMap::new(),
+            ..Default::default()
         }
-    }
-
-    pub fn to_form_params(&self) -> Vec<(Cow<'a, str>, &str)> {
-        let mut params = Vec::new();
-
-        params.push((Cow::Borrowed("name"), self.name));
-        params.push((Cow::Borrowed("email"), self.email));
-
-        if let Some(phone) = self.phone {
-            params.push((Cow::Borrowed("phone"), phone));
-        }
-
-        for (k, v) in self.metadata.clone() {
-            params.push((Cow::Owned(format!("metadata[{}]", k)), v));
-        }
-
-        params
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Customer {
     id: CustomerId,
     name: Option<String>,
@@ -104,7 +39,7 @@ impl Customer {
         customer: CreateCustomer<'_>,
     ) -> Result<Customer, reqwest::Error> {
         client
-            .post("/customers", customer.to_form_params())
+            .post("/customers", &customer)
             .await?
             .json::<Self>()
             .await

@@ -1,10 +1,16 @@
-use std::borrow::Cow;
-
 use reqwest::Response;
+use serde::Serialize;
 
 pub mod billing;
 pub mod checkout;
 pub mod customer;
+pub mod value_objects;
+
+pub use billing::*;
+pub use checkout::*;
+pub use customer::*;
+pub use value_objects::customer::CustomerId;
+pub use value_objects::price::PriceId;
 
 const STRIPE_API_BASE_URL: &str = "https://api.stripe.com/v1";
 
@@ -29,18 +35,10 @@ impl Client {
         }
     }
 
-    pub(crate) async fn get(&self, endpoint: &str) -> Result<Response, reqwest::Error> {
-        self.http
-            .get(format!("{}{endpoint}", STRIPE_API_BASE_URL))
-            .basic_auth(self.stripe_secret_key.clone(), Some(""))
-            .send()
-            .await
-    }
-
     pub(crate) async fn post(
         &self,
         endpoint: &str,
-        body: Vec<(Cow<'_, str>, &str)>,
+        body: &impl Serialize,
     ) -> Result<Response, reqwest::Error> {
         self.http
             .post(format!("{}{endpoint}", STRIPE_API_BASE_URL))
