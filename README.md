@@ -118,10 +118,10 @@ fn listen_to_webhooks(headers: &http::HeaderMap, body: &str) -> Result<(), shima
     let listener = shima::webhook::Listener::new(&client);
     
     match shima_event = listener.process(headers, body)? {
-    		ShimaEvent::CheckoutSessionCompleted(event) => println!("Checkout session completed: {:?}", event),
-	      ShimaEvent::InvoicePaymentFailed(event) => println!("Invoice payment failed: {:?}", event),
-	      ShimaEvent::CustomerSubscriptionDeleted(event) => println!("Customer subscription deleted: {:?}", event),
-	      ShimaEvent::Other(event) => println!("Other event: {:?}", event),
+		ShimaEvent::CheckoutSessionCompleted(event) => println!("Checkout session completed: {:?}", event),
+		ShimaEvent::InvoicePaymentFailed(event) => println!("Invoice payment failed: {:?}", event),
+		ShimaEvent::CustomerSubscriptionDeleted(event) => println!("Customer subscription deleted: {:?}", event),
+		ShimaEvent::Other(event) => println!("Other event: {:?}", event),
     }
 }
 ```
