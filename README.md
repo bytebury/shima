@@ -123,5 +123,7 @@ fn listen_to_webhooks(headers: &http::HeaderMap, body: &str) -> Result<(), shima
 		ShimaEvent::CustomerSubscriptionDeleted(event) => println!("Customer subscription deleted: {:?}", event),
 		ShimaEvent::Other(event) => println!("Other event: {:?}", event),
     }
+
+    Ok(())
 }
 ```
