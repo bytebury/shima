@@ -38,6 +38,12 @@ impl From<String> for Error {
     }
 }
 
+impl From<serde_json::Error> for crate::Error {
+    fn from(err: serde_json::Error) -> Self {
+        crate::Error::Internal(err.to_string())
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct StripeError {
     pub message: String,

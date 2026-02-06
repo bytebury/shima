@@ -1,6 +1,6 @@
 [package]
 name = "shima"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2024"
 repository = "https://github.com/bytebury/shima"
 homepage = "https://github.com/bytebury/shima"
@@ -11,5 +11,11 @@ keywords = ["shima", "stripe", "stripe-webhooks", "simple-stripe", "stripe-api"]
 license = "MIT"
 
 [dependencies]
+hex = "0.4.3"
+hmac = "0.12.1"
+http = "1.4.0"
 reqwest = { version = "0.13.1", features = ["json", "form"] }
 serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+sha2 = "0.10.9"
+subtle = "2.6.1"

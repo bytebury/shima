@@ -33,10 +33,13 @@ shima = "0.1.0"
 ### Generating a new shima client
 ```rust
 // You can generate a client directly from your environment variables
-// if you have `STRIPE_SECRET_KEY` set. This is preferred.
+// if you have `STRIPE_SECRET_KEY` and will also set the webhook if
+// `STRIPE_WEBHOOK_SECRET` is set. This is preferred.
 let client = shima::Client::from_env();
-// Alternatively, you can load it from a string.
+// Alternatively, you can load it from a string without a webhook secret.
 let client = shima::Client::new("sk_test_123456...");
+// Or, you can load it from a string with a webhook secret.
+let client = shima::Client::new("sk_test_123456...").with_webhook_secret("whsec_123456...");
 ```
 
 ### Creating a Stripe Customer
@@ -45,7 +48,7 @@ use shima::customer::{Customer, CreateCustomer};
 
 // Create a Customer in Stripe.
 async fn create_customer() -> Result<Customer, shima::Error> {
-    // Generate a new shima client, reading from our environment variables
+    // Generate a new shima client, reading from our environment variables.
     let client = shima::Client::from_env();
 
     // Setup the new Customer.
@@ -106,5 +109,19 @@ async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {
 
 ### Webhooks
 ```rust
-todo!();
+use shima::webhook::ShimaEvent;
+
+// Listen to Stripe events via webhooks
+fn listen_to_webhooks(headers: &http::HeaderMap, body: &str) -> Result<(), shima::Error> {
+    // Generate a new shima client, reading from our environment variables.
+    let client = shima::Client::from_env();
+    let listener = shima::webhook::Listener::new(&client);
+    
+    match shima_event = listener.process(headers, body)? {
+    		ShimaEvent::CheckoutSessionCompleted(event) => println!("Checkout session completed: {:?}", event),
+	      ShimaEvent::InvoicePaymentFailed(event) => println!("Invoice payment failed: {:?}", event),
+	      ShimaEvent::CustomerSubscriptionDeleted(event) => println!("Customer subscription deleted: {:?}", event),
+	      ShimaEvent::Other(event) => println!("Other event: {:?}", event),
+    }
+}
 ```
