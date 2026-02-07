@@ -13,6 +13,7 @@ pub use value_objects::*;
 
 const STRIPE_API_BASE_URL: &str = "https://api.stripe.com/v1";
 
+#[derive(Clone)]
 pub struct Client {
     stripe_secret_key: String,
     pub(crate) stripe_webhook_secret: Option<String>,
