@@ -26,14 +26,14 @@ impl<'a> CreateCustomer<'a> {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Customer {
-    id: CustomerId,
-    name: Option<String>,
-    email: Option<String>,
-    address: Option<String>,
-    description: Option<String>,
-    phone: Option<String>,
-    tax_exempt: Option<String>,
-    metadata: Option<HashMap<String, String>>,
+    pub id: CustomerId,
+    pub name: Option<String>,
+    pub email: Option<String>,
+    pub address: Option<String>,
+    pub description: Option<String>,
+    pub phone: Option<String>,
+    pub tax_exempt: Option<String>,
+    pub metadata: Option<HashMap<String, String>>,
 }
 
 impl Customer {
