@@ -115,7 +115,7 @@ use shima::webhook::ShimaEvent;
 fn listen_to_webhooks(headers: &http::HeaderMap, body: &str) -> Result<(), shima::Error> {
     // Generate a new shima client, reading from our environment variables.
     let client = shima::Client::from_env();
-    let listener = shima::webhook::Listener::new(&client);
+    let listener = shima::webhook::Listener::new(client);
     
     match listener.process(headers, body)? {
 		ShimaEvent::CheckoutSessionCompleted(event) => println!("Checkout session completed: {:?}", event),

@@ -10,12 +10,12 @@ pub mod event;
 
 type HmacSha256 = Hmac<Sha256>;
 
-pub struct Listener<'a> {
-    client: &'a crate::Client,
+pub struct Listener {
+    client: crate::Client,
 }
 
-impl<'a> Listener<'a> {
-    pub fn new(client: &'a crate::Client) -> Self {
+impl Listener {
+    pub fn new(client: crate::Client) -> Self {
         Self { client }
     }
 

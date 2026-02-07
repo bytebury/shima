@@ -10,7 +10,7 @@ impl TryFrom<String> for CustomerId {
     type Error = crate::Error;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
-        return Self::try_from(value.as_str());
+        Self::try_from(value.as_str())
     }
 }
 
