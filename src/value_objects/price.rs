@@ -23,7 +23,7 @@ impl TryFrom<String> for PriceId {
 }
 
 impl TryFrom<&str> for PriceId {
-    type Error = String;
+    type Error = crate::Error;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         if value.trim().is_empty() {
