@@ -1,8 +1,10 @@
 use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
+use sqlx::prelude::FromRow;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, sqlx::Type, FromRow)]
+#[sqlx(transparent)]
 #[serde(transparent)]
 pub struct CustomerId(String);
 
