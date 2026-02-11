@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CustomerPortalSession {
-    url: String,
+    pub url: String,
 }
 
 impl CustomerPortalSession {
