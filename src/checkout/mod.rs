@@ -45,8 +45,8 @@ impl<'a> CreateCheckoutSession<'a> {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CheckoutSession {
-    id: String,
-    url: Option<String>,
+    pub id: String,
+    pub url: Option<String>,
 }
 
 impl CheckoutSession {
