@@ -20,12 +20,20 @@ Shima is a lightweight, high-performance Stripe API client library written in Ru
 * Type-safe
 * Minimal dependencies
 * Easy to use
+* Macros remove all the boilerplate code
 
 ## Getting Started
 Add `shima` to your `Cargo.toml` file:
 
 ```sh
+# gives you the basics including macros
 cargo add shima
+# if you want to use this with sqlx
+cargo add shima --features sqlx
+# if you want to use this with webhooks
+cargo add shima --features webhooks
+# or you can enable all features
+cargo add shima --features all
 ```
 
 
@@ -43,32 +51,37 @@ let client = shima::Client::new("sk_test_123456...").with_webhook_secret("whsec_
 ```
 
 ### Creating a Stripe Customer
-```rust
-use shima::customer::{Customer, CreateCustomer};
+There are two ways that you can create a Customer in Stripe. You can either use the `create_customer!` macro or go through the `Customer` struct.
+
+```rs
+/// This creates a new Customer in Stripe with the macro.
+async fn macro_example() -> Result<Customer, shima::Error> {
+	let client = Client::from_env();
+	create_customer!(&client, "John Doe", "john@example.com")
+}
 
 // Create a Customer in Stripe.
-async fn create_customer() -> Result<Customer, shima::Error> {
-    // Generate a new shima client, reading from our environment variables.
-    let client = shima::Client::from_env();
-
-    // Setup the new Customer.
+async fn code_example() -> Result<Customer, shima::Error> {
+    let client = Client::from_env();
     let mut customer = CreateCustomer::new("John Doe", "john@example.com");
-    customer.metadata.insert("user_id", "123456");
-
-    // Create the customer.
     Customer::create(&client, customer).await
 }
 ```
 
 ### Purchasing Subscriptions / Checkout
+There are two ways that you can create a Checkout Session for a Customer. You can either use the 
+`checkout!` macro or go through the `CheckoutSession` struct.
+
 ```rust
-use shima::checkout::{CheckoutSession, CreateCheckoutSession};
-use shima::{CustomerId, PriceId, CancelUrl, SuccessUrl};
+/// This creates a new Checkout Session for a Customer with the macro.
+async fn macro_example() -> Result<CheckoutSession, shima::Error> {
+	let client = Client::from_env();
+	create_checkout!(&client, "cus_123456", "price_123456", "https://example.com/success", "https://example.com/cancel")
+}
 
 // Create a Checkout Session for a Customer.
 async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
-    // Generate a new shima client, reading from our environment variables
-    let client = shima::Client::from_env();
+    let client = Client::from_env();
 
     // Setup the Checkout Session.
     let mut session = CreateCheckoutSession::new_subscription(
@@ -77,23 +90,24 @@ async fn create_checkout_session() -> Result<CheckoutSession, shima::Error> {
         SuccessUrl::from("https://example.com/success"),
         CancelUrl::from("https://example.com/cancel"),
     );
-    session.metadata.insert("user_id", "1"); // Optional metadata
 
     // Create the Checkout Session.
     CheckoutSession::create(&client, session).await
 }
-
 ```
 
 ### Manage Subscriptions / Customer Portal
 ```rust
-use shima::billing::{CustomerPortalSession, CreateCustomerPortalSession};
-use shima::{CustomerId, ReturnUrl};
+/// Bring the customer to their Customer Portal via the macro.
+async fn macro_example() -> Result<CustomerPortalSession, shima::Error> {
+	let client = Client::from_env();
+	manage_subscriptions!(&client, "cus_123456", "https://example.com")
+}
 
-// Let customers manage their subscriptions
+/// Bring the customer to their Customer Portal via code.
 async fn manage_subscription() -> Result<CustomerPortalSession, shima::Error> {
     // Generate a new shima client, reading from our environment variables.
-    let client = shima::Client::from_env();
+    let client = Client::from_env();
 
     // Get the customer you want to manage.
     let customer = CustomerId::try_from("cus_123456")?;

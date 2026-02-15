@@ -1,11 +1,10 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
-use serde::{Deserialize, Serialize};
-use sqlx::prelude::FromRow;
-
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::Type, FromRow)]
-#[sqlx(transparent)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(transparent)]
+#[cfg_attr(feature = "sqlx", derive(sqlx::Type, sqlx::FromRow))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 pub struct CustomerId(String);
 
 impl TryFrom<String> for CustomerId {

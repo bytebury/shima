@@ -1,6 +1,6 @@
 [package]
 name = "shima"
-version = "0.5.6"
+version = "0.6.0"
 edition = "2024"
 repository = "https://github.com/bytebury/shima"
 homepage = "https://github.com/bytebury/shima"
@@ -10,13 +10,18 @@ readme = "README.md"
 keywords = ["shima", "stripe", "stripe-webhooks", "simple-stripe", "stripe-api"]
 license = "MIT"
 
+[features]
+all = ["webhook", "sqlx"]
+webhook = ["dep:hex", "dep:hmac", "dep:sha2", "dep:subtle"]
+sqlx = ["dep:sqlx"]
+
 [dependencies]
-hex = "0.4.3"
-hmac = "0.12.1"
+hex = { version = "0.4.3", optional = true }
+hmac = { version = "0.12.1", optional = true }
 http = "1.4.0"
 reqwest = { version = "0.13.1", features = ["json", "form"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
-sha2 = "0.10.9"
-sqlx = "0.8.6"
-subtle = "2.6.1"
+sha2 = { version = "0.10.9", optional = true }
+sqlx = { version = "0.8.6", optional = true }
+subtle = { version = "2.6.1", optional = true }
