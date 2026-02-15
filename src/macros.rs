@@ -27,22 +27,22 @@ macro_rules! checkout {
     }};
 
     ($client:expr, $session:expr) => {
-        $crate::CheckoutSession::create($client, $session).await
+        $crate::checkout::CheckoutSession::create($client, $session).await
     };
 }
 
 #[macro_export]
 macro_rules! manage_subscriptions {
     ($client:expr, $customer_id:expr, $return_url:expr) => {{
-        let session = $crate::CreateCustomerPortalSession {
+        let session = $crate::billing::CreateCustomerPortalSession {
             customer: $customer_id,
             return_url: Some($return_url),
             ..Default::default()
         };
-        $crate::CustomerPortalSession::create($client, session).await
+        $crate::billing::CustomerPortalSession::create($client, session).await
     }};
 
     ($client:expr, $session:expr) => {
-        $crate::CustomerPortalSession::create($client, $session).await
+        $crate::billing::CustomerPortalSession::create($client, $session).await
     };
 }
