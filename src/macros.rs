@@ -36,7 +36,7 @@ macro_rules! manage_subscriptions {
     ($client:expr, $customer_id:expr, $return_url:expr) => {{
         let session = $crate::billing::CreateCustomerPortalSession {
             customer: $customer_id,
-            return_url: Some($return_url),
+            return_url: $return_url,
             ..Default::default()
         };
         $crate::billing::CustomerPortalSession::create($client, session).await
