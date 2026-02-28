@@ -10,6 +10,7 @@ pub mod event;
 
 type HmacSha256 = Hmac<Sha256>;
 
+#[derive(Clone)]
 pub struct Listener {
     client: crate::Client,
 }
