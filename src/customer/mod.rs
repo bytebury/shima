@@ -54,4 +54,30 @@ impl Customer {
             ))),
         }
     }
+
+    pub async fn delete(
+        client: &crate::Client,
+        customer_id: CustomerId,
+    ) -> Result<DeletedCustomer, crate::Error> {
+        let res = client
+            .delete(&format!("/customers/{customer_id}"))
+            .await?;
+
+        if res.status().is_success() {
+            return Ok(res.json::<DeletedCustomer>().await?);
+        }
+
+        match res.json::<StripeErrorResponse>().await {
+            Ok(e) => Err(crate::Error::Stripe(e.error)),
+            Err(e) => Err(crate::Error::Internal(format!(
+                "Failed to parse Stripe error response: {e}"
+            ))),
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct DeletedCustomer {
+    pub id: CustomerId,
+    pub deleted: bool,
 }

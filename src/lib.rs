@@ -82,4 +82,12 @@ impl Client {
             .send()
             .await
     }
+
+    pub(crate) async fn delete(&self, endpoint: &str) -> Result<Response, reqwest::Error> {
+        self.http
+            .delete(format!("{}{endpoint}", STRIPE_API_BASE_URL))
+            .basic_auth(self.stripe_secret_key.clone(), Some(""))
+            .send()
+            .await
+    }
 }

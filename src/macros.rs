@@ -15,6 +15,13 @@ macro_rules! create_customer {
 }
 
 #[macro_export]
+macro_rules! delete_customer {
+    ($client:expr, $customer_id:expr) => {{
+        $crate::customer::Customer::delete($client, $customer_id.try_into().unwrap()).await
+    }};
+}
+
+#[macro_export]
 macro_rules! checkout {
     ($client:expr, $customer:expr, $price:expr, $success:expr, $cancel:expr) => {{
         let session = $crate::checkout::CreateCheckoutSession::new_subscription(
