@@ -1,6 +1,6 @@
 [package]
 name = "shima"
-version = "0.7.0"
+version = "0.8.0"
 edition = "2024"
 repository = "https://github.com/bytebury/shima"
 homepage = "https://github.com/bytebury/shima"
@@ -25,7 +25,7 @@ reqwest = { version = "0.13.1", features = ["json", "form", "query"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 sha2 = { version = "0.10.9", optional = true }
-sqlx = { version = "0.8.6", optional = true }
+sqlx = { version = "0.9.0", default-features = false, features = ["derive"], optional = true }
 subtle = { version = "2.6.1", optional = true }
 
 [dev-dependencies]

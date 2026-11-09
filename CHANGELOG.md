@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+### Breaking changes
+- The `sqlx` feature targets **sqlx 0.9** (was 0.8). Projects still on sqlx
+  0.8 should stay on shima 0.7.
+
 ## 0.7.0
 
 ### Security
