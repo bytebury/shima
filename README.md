@@ -27,7 +27,7 @@ Shima compiles up to 10x faster and stays out of your way.
 ```sh
 cargo add shima                     # customers, checkout, subscriptions, portal, usage, entitlements
 cargo add shima --features webhook  # + webhook verification
-cargo add shima --features sqlx     # + store IDs (CustomerId, PriceId, SubscriptionId) with sqlx
+cargo add shima --features sqlx     # + store IDs (CustomerId, PriceId, SubscriptionId) with sqlx 0.9
 cargo add shima --features all      # everything
 ```
 
