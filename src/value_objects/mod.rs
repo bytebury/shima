@@ -1,8 +1,19 @@
-pub mod customer;
-pub(crate) mod metadata;
-pub mod price;
+pub mod ids;
+pub mod list;
+pub mod metadata;
 pub mod urls;
 
-pub use customer::*;
-pub use price::*;
+pub use ids::*;
+pub use list::*;
+pub use metadata::*;
 pub use urls::*;
+
+/// Backwards-compatible paths for the ID types.
+pub mod customer {
+    pub use super::ids::CustomerId;
+}
+
+/// Backwards-compatible paths for the ID types.
+pub mod price {
+    pub use super::ids::PriceId;
+}

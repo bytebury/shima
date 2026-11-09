@@ -1,76 +1,51 @@
 use crate::PriceId;
-use serde::{Deserialize, Serialize, Serializer};
-use std::fmt::Display;
+use serde::{Deserialize, Serialize};
+use std::fmt::{self, Display};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+/// The checkout mode.
+#[derive(Debug, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum Mode {
+    /// Recurring payments.
     #[default]
     Subscription,
+    /// A one-time payment.
     Payment,
+    /// Save a payment method for later without charging it.
+    Setup,
 }
 
 impl Display for Mode {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            Mode::Subscription => write!(f, "subscription"),
-            Mode::Payment => write!(f, "payment"),
-        }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(match self {
+            Mode::Subscription => "subscription",
+            Mode::Payment => "payment",
+            Mode::Setup => "setup",
+        })
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+/// A price and the quantity to buy (e.g. the number of seats).
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct LineItem(pub PriceId, pub u32);
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct LineItems(pub Vec<LineItem>);
 
-impl Serialize for LineItems {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        use serde::ser::SerializeMap;
-        let mut map = serializer.serialize_map(Some(self.0.len() * 2))?;
-
-        for (i, item) in self.0.iter().enumerate() {
-            map.serialize_entry(&format!("line_items[{}][price]", i), &item.0)?;
-            map.serialize_entry(&format!("line_items[{}][quantity]", i), &item.1)?;
-        }
-        map.end()
-    }
-}
-
-#[derive(Debug, Deserialize)]
+/// Whether Stripe Tax calculates tax automatically.
+/// Requires [Stripe Tax](https://docs.stripe.com/tax) to be set up on your account.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct AutomaticTax {
-    enabled: bool,
-    liability: Option<bool>,
-}
-
-impl Serialize for AutomaticTax {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        use serde::ser::SerializeMap;
-        let mut map = serializer.serialize_map(None)?;
-
-        map.serialize_entry("automatic_tax[enabled]", &self.enabled)?;
-
-        if let Some(liability) = self.liability {
-            map.serialize_entry("automatic_tax[liability]", &liability)?;
-        }
-
-        map.end()
-    }
+    pub enabled: bool,
 }
 
 impl AutomaticTax {
     pub fn collect_tax() -> Self {
-        Self {
-            enabled: true,
-            liability: None,
-        }
+        Self { enabled: true }
+    }
+
+    pub fn disabled() -> Self {
+        Self { enabled: false }
     }
 }
 
@@ -80,42 +55,94 @@ impl Default for AutomaticTax {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+impl From<bool> for AutomaticTax {
+    fn from(enabled: bool) -> Self {
+        Self { enabled }
+    }
+}
+
+/// Whether to always collect the customer's billing address.
+#[derive(Debug, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum BillingAddressCollection {
+    /// Only when needed, e.g. for tax.
     #[default]
     Auto,
     Required,
 }
 
 impl Display for BillingAddressCollection {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            BillingAddressCollection::Auto => write!(f, "auto"),
-            BillingAddressCollection::Required => write!(f, "required"),
-        }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(match self {
+            BillingAddressCollection::Auto => "auto",
+            BillingAddressCollection::Required => "required",
+        })
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct CustomerUpdate<'a> {
-    address: &'a str,
+/// When to ask for a payment method during checkout.
+#[derive(Debug, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum PaymentMethodCollection {
+    #[default]
+    Always,
+    /// Skip the card form when nothing is due today, e.g. free trials
+    /// without a card on file.
+    IfRequired,
 }
 
-impl Default for CustomerUpdate<'_> {
+impl Display for PaymentMethodCollection {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(match self {
+            PaymentMethodCollection::Always => "always",
+            PaymentMethodCollection::IfRequired => "if_required",
+        })
+    }
+}
+
+/// Whether checkout saves details the customer enters back onto an existing
+/// customer. Only sent when the session has a `customer`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct CustomerUpdate {
+    /// Save the billing address. Needed for automatic tax.
+    pub address: bool,
+    /// Save the name. Needed for tax ID collection.
+    pub name: bool,
+}
+
+impl Default for CustomerUpdate {
     fn default() -> Self {
-        Self { address: "auto" }
+        Self { address: true, name: false }
     }
 }
 
-impl<'a> Serialize for CustomerUpdate<'a> {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        use serde::ser::SerializeMap;
-        let mut map = serializer.serialize_map(Some(1))?;
-        map.serialize_entry("customer_update[address]", &self.address)?;
-        map.end()
-    }
+/// The checkout session's status.
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum CheckoutStatus {
+    Open,
+    Complete,
+    Expired,
+    #[serde(other)]
+    Unknown,
+}
+
+/// Whether the checkout session has been paid.
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum PaymentStatus {
+    Paid,
+    Unpaid,
+    /// E.g. a free trial; the customer still gets access.
+    NoPaymentRequired,
+    #[serde(other)]
+    Unknown,
+}
+
+/// The details the customer entered during checkout.
+#[derive(Debug, Default, Serialize, Deserialize, Clone)]
+pub struct CustomerDetails {
+    pub email: Option<String>,
+    pub name: Option<String>,
+    pub phone: Option<String>,
 }
